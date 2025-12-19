@@ -1,10 +1,8 @@
 'use client'
 
-import { useState } from "react";
 import { Phone } from "../types/types";
 import CustomPhoneCard from "./CustomPhoneCard";
 import PhoneCard from "./PhoneCard";
-import CustomModal from "./CustomModal";
 
 interface PhoneGridProps {
   phones: Phone[];

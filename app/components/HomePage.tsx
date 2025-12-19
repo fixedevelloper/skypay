@@ -15,7 +15,7 @@ import BottomNav from "./BottomNav";
 export default function HomePage() {
   const router = useRouter();
   const [phones, setPhones] = useState<Phone[]>([]);
-  const BASE_IMAGE = 'http://localhost:8000';
+  const BASE_IMAGE = process.env.NEXT_PUBLIC_API_URL;
   console.log(BASE_IMAGE)
   const [customModalOpen, setCustomModalOpen] = useState(false);
   const [customName, setCustomName] = useState("");

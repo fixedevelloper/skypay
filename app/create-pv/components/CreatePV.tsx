@@ -7,9 +7,23 @@ import { useRouter } from "next/navigation";
 import React, { useState, useRef } from "react";
 import StepWizard from "react-step-wizard";
 
+type FormDataType = {
+    name_promote: string;
+    name_salepoint: string;
+    activity: string;
+    phone: string;
+    phonePv: string;
+    localisation: string;
+
+    image_piece: File | null;
+    image_doc_fiscal: File | null;
+    image_cni_recto: File | null;
+    image_cni_verso: File | null;
+};
+
 export default function CreatePVPage() {
     const router = useRouter();
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<FormDataType>({
         name_promote: "",
         name_salepoint: "",
         activity: "",
@@ -22,10 +36,10 @@ export default function CreatePVPage() {
         image_cni_verso: null,
     });
 
+
     const [submitting, setSubmitting] = useState(false);
     const [step, setStep] = useState(0);
-    const wizardRef = useRef<any>();
-
+    const wizardRef = useRef<any>(null);
     const steps = ["Informations", "Documents", "Aperçu"];
 
     const handleChange = (field: string, value: any) => {
@@ -77,6 +91,18 @@ export default function CreatePVPage() {
     };
 
     const progressPercent = ((step + 1) / steps.length) * 100;
+    const fileFields: {
+        label: string;
+        key: keyof Pick<
+            FormDataType,
+            "image_piece" | "image_doc_fiscal" | "image_cni_recto" | "image_cni_verso"
+            >;
+    }[] = [
+        { label: "Image pièce", key: "image_piece" },
+        { label: "Image doc fiscal", key: "image_doc_fiscal" },
+        { label: "Image CNI recto", key: "image_cni_recto" },
+        { label: "Image CNI verso", key: "image_cni_verso" },
+    ];
 
     return (
         <div className="min-h-screen bg-gray-100 pb-20 flex flex-col">
@@ -154,6 +180,17 @@ export default function CreatePVPage() {
 
                         {/* Step 2 */}
                         <div className="space-y-3">
+                            {fileFields.map((field) => (
+                                <FileField
+                                    key={field.key}
+                                    label={field.label}
+                                    file={formData[field.key]}
+                                    onChange={(f) => handleChange(field.key, f)}
+                                />
+                            ))}
+                        </div>
+
+                        {/*     <div className="space-y-3">
                             {[
                                 { label: "Image pièce", key: "image_piece" },
                                 { label: "Image doc fiscal", key: "image_doc_fiscal" },
@@ -167,7 +204,7 @@ export default function CreatePVPage() {
                                     onChange={(f) => handleChange(field.key, f)}
                                 />
                             ))}
-                        </div>
+                        </div>*/}
 
                         {/* Step 3 */}
                         <div className="space-y-3">

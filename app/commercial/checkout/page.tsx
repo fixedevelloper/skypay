@@ -10,7 +10,7 @@ import Header from "@/app/components/Header";
 import mtn from "@/public/icons/momo_mtnb.png";
 import orange from "@/public/icons/orange.png";
 import { LucideUserPlus, ShoppingBag, ShoppingBasketIcon, Users } from "lucide-react";
-import axiosServices from "@/app/utils/axiosServices";
+import axiosServices from "../../lib/axios";
 
 export default function Checkout() {
     const router = useRouter();

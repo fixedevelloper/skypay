@@ -5,12 +5,12 @@ import { useRouter } from "next/navigation";
 
 import { useSession } from "next-auth/react";
 import { Phone } from "../types/types";
-import axiosServices from "../utils/axiosServices";
 import Header from "./Header";
 import WalletCard from "./WalletCard";
 import CustomModal from "./CustomModal";
 import PhoneGrid from "./PhoneGrid";
 import BottomNav from "./BottomNav";
+import axiosServices from "../lib/axios";
 
 export default function HomePage() {
   const router = useRouter();
@@ -30,8 +30,10 @@ export default function HomePage() {
         console.warn("API error:", err);
       }
     };
+    console.log(session?.user.token)
     fetchProducts();
   }, []);
+
 
   const handleChoice = (phone: Phone, isLeasing: boolean, amount: number) => {
     const finalData = {

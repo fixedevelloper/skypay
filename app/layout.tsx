@@ -1,6 +1,6 @@
 import "./globals.css";
-import AppProvidersWrapper from "./components/AppWrapper";
 import { Metadata } from "next";
+import AppProvidersWrapper from "./providers/AppProvidersWrapper";
 
 
 export const metadata: Metadata = {
@@ -8,43 +8,20 @@ export const metadata: Metadata = {
     template: '%s | achat rapide et securisee',
     default: 'Skypay',
   },
-  description: 'A fully featured admin theme which can be used to build CRM, CMS, etc.',
+  description: 'Vente Telephone .',
 }
 
 export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+                                     children,
+                                   }: Readonly<{ children: React.ReactNode }>) {
   return (
- <html lang="en">
+      <html lang="en">
+      <head />
       <body>
-        <AppProvidersWrapper>{children}</AppProvidersWrapper>
+      <AppProvidersWrapper>
+        {children}
+      </AppProvidersWrapper>
       </body>
-    </html>
+      </html>
   );
 }
-/* export default function RootLayout({
-  children,
-  session,
-}: Readonly<{
-  children: React.ReactNode;
-  session: any;
-}>) {
-  return (
-    <html lang="fr">
-      <body
-        className={` antialiased`}
-      >
-        <SessionProviderWrapper session={session}>
-           <SnackbarProvider  maxSnack={3}
-                               anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                               autoHideDuration={4000}>
-          {children}
-           <AxiosInterceptorSetup />
-          </SnackbarProvider>
-        </SessionProviderWrapper>
-      </body>
-    </html>
-  );
-} */

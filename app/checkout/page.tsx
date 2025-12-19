@@ -8,7 +8,7 @@ import BottomNav from "@/app/components/BottomNav";
 import Header from "@/app/components/Header";
 import mtn from "@/public/icons/momo_mtnb.png";
 import orange from "@/public/icons/orange.png";
-import axiosServices from "../utils/axiosServices";
+import axiosServices from "../lib/axios";
 
 export default function Checkout() {
   const router = useRouter();

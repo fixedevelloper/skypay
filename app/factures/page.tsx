@@ -2,8 +2,8 @@
 import { useEffect, useState } from "react";
 import BottomNav from "@/app/components/BottomNav";
 import Header from "@/app/components/Header";
-import axiosServices from "../utils/axiosServices";
 import { useRouter } from "next/navigation";
+import axiosServices from "../lib/axios";
 
 export default function Factures() {
   const [amount, setAmount] = useState("");

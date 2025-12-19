@@ -1,15 +1,13 @@
 'use client'
 import BottomNav from "@/app/components/BottomNav";
 import Header from "@/app/components/Header";
-import ServiceGrid from "@/app/components/ServiceGrid";
-import WalletCard from "@/app/components/WalletCard";
-import axiosServices from "@/app/utils/axiosServices";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import mtn from "@/public/icons/momo_mtnb.png";
 import orange from "@/public/icons/orange.png";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
+import axiosServices from "../../lib/axios";
 
 
 export default function MakePay() {

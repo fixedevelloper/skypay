@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Header from "../components/Header";
 import BottomNav from "../components/BottomNav";
-import axiosServices from "../utils/axiosServices";
+import axiosServices from "../lib/axios";
 
 interface Customer {
   id: number;

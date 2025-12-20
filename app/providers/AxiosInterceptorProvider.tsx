@@ -62,7 +62,7 @@ const AxiosInterceptorProvider = () => {
                 console.groupEnd();
 
                 if (status === 401) {
-                    signOut({ callbackUrl: "/auth/singin" });
+                    signOut({ callbackUrl: "/auth/signin" });
                 }
 
                 return Promise.reject(error);

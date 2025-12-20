@@ -1,4 +1,4 @@
-import { AlertCircleIcon, BellIcon, LogInIcon, LogOutIcon, UserCheck, UserCircleIcon } from "lucide-react";
+import { AlertCircleIcon, BellIcon, LogInIcon, LogOutIcon, UserCheck, UserCircleIcon,MenuIcon } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,10 +12,10 @@ export default function Header() {
       {session?.user ? (
       <Link href="/profil">
         <span className="text-xl font-semibold">
-          <UserCircleIcon size={28} />
+          <MenuIcon size={28} />
         </span>
       </Link>):(
-      <Link href="/auth/singin">
+      <Link href="/auth/signin">
         <span className="text-xl font-semibold">
           <UserCheck size={28} />
         </span>
@@ -39,7 +39,7 @@ export default function Header() {
             />
 
         ) : (
-          <Link href="/auth/singin">
+          <Link href="/auth/signin">
             <LogInIcon size={28} className="cursor-pointer hover:opacity-80" />
           </Link>
         )}

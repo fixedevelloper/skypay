@@ -3,44 +3,50 @@ import BottomNav from "@/app/components/BottomNav";
 import FileField from "@/app/components/FileInput";
 import Header from "@/app/components/Header";
 import InputField from "@/app/components/InputField";
-import { useRouter } from "next/navigation";
-import React, { useState, useRef } from "react";
+import {useRouter} from "next/navigation";
+import React, {useState, useRef} from "react";
 import StepWizard from "react-step-wizard";
-import axiosServices from "../../lib/axios";
 import mtn from "@/public/icons/momo_mtnb.png";
 import orange from "@/public/icons/orange.png";
 import Image from "next/image";
+import axiosServices from "../../lib/axios";
 
 type FormDataType = {
-    name_promote: string;
-    name_salepoint: string;
-    activity: string;
-    phone: string;
-    phonePv: string;
-    localisation: string;
-    phonePayment:string;
-    platform:string;
-    image_piece: File | null;
-    image_doc_fiscal: File | null;
-    image_cni_recto: File | null;
-    image_cni_verso: File | null;
+    name_entreprise: string;
+    name_responsable: string;
+    poste_responsable: string;
+
+    amount_bc: number;
+    number_souscripteur: number;
+    number_echeance_paiement: number;
+
+    name_gestionnaire: string;
+    name_manager: string;
+    platform:string,
+    phone:string,
+    image_bc: File | null;
+    image_bl: File | null;
+    image_facture: File | null;
 };
 
-export default function CreatePVPage() {
+
+export default function CreatePMESPage() {
     const router = useRouter();
     const [formData, setFormData] = useState<FormDataType>({
-        name_promote: "",
-        name_salepoint: "",
-        activity: "",
-        phone: "",
+        amount_bc: 0,
+        image_bc: null,
+        image_bl: null,
+        image_facture: null,
+        name_entreprise: "",
+        name_gestionnaire: "",
+        name_manager: "",
         platform: "",
-        phonePayment: "",
-        phonePv: "",
-        localisation: "",
-        image_piece: null,
-        image_doc_fiscal: null,
-        image_cni_recto: null,
-        image_cni_verso: null,
+        phone: "",
+        name_responsable: "",
+        number_echeance_paiement: 0,
+        number_souscripteur: 0,
+        poste_responsable: ""
+
     });
 
     const [status, setStatus] = useState<string | null>(null);
@@ -52,7 +58,7 @@ export default function CreatePVPage() {
     const steps = ["Informations", "Documents", "Aperçu"];
     const [platform, setPlatform] = useState<"MTN" | "ORANGE">("MTN");
     const handleChange = (field: string, value: any) => {
-        setFormData(prev => ({ ...prev, [field]: value }));
+        setFormData(prev => ({...prev, [field]: value}));
     };
 
     const onNext = () => wizardRef.current?.nextStep();
@@ -60,44 +66,50 @@ export default function CreatePVPage() {
 
     const handleSubmit = async () => {
         setSubmitting(true);
+        setError(null);
+        setStatus("PENDING");
         try {
             const payload = new FormData();
             payload.append("platform", platform);
             Object.entries(formData).forEach(([key, value]) => {
-                if (value) payload.append(key, value as any);
+                if (value !== null && value !== undefined && value !== "") {
+                    payload.append(key, value as any);
+                }
+
+                //  if (value) payload.append(key, value as any);
             });
 
-/*            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/point-sales`, {
+/*            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/pmes`, {
                 method: "POST",
                 body: payload,
-            });
-
-            const data = await res.json();
-            if (!res.ok) throw new Error(data.message || "Erreur serveur");*/
-            const res = await axiosServices.post("/api/point-sales", payload);
+            });*/
+            const res = await axiosServices.post("/api/pmes", payload);
+          //  const data = await res.json();
             const data = res.data;
             if (data.referenceId) {
-                localStorage.setItem("referenceId",data.referenceId)
-                router.push("/create-pv/waiting-pay");
+                alert("PV enregistré avec succès !");
+                localStorage.setItem("referenceId", data.referenceId)
+                router.push("/create-pmes/waiting-pay");
                 setFormData({
-                    phonePayment: "",
-                    platform: "",
-                    name_promote: "",
-                    phone: "",
-                    name_salepoint: "",
-                    activity: "",
-                    phonePv: "",
-                    localisation: "",
-                    image_piece: null,
-                    image_doc_fiscal: null,
-                    image_cni_recto: null,
-                    image_cni_verso: null
+                    phone: "", platform: "",
+                    amount_bc: 0,
+                    image_bc: null,
+                    image_bl: null,
+                    image_facture: null,
+                    name_entreprise: "",
+                    name_gestionnaire: "",
+                    name_manager: "",
+                    name_responsable: "",
+                    number_echeance_paiement: 0,
+                    number_souscripteur: 0,
+                    poste_responsable: ""
                 });
                 wizardRef.current?.goToStep(1);
                 setStep(0);
             } else {
                 throw new Error("Aucune référence de paiement reçue.");
             }
+
 
         } catch (err: any) {
             console.error("Erreur de paiement:", err.response?.data || err.message);
@@ -111,44 +123,49 @@ export default function CreatePVPage() {
     const progressPercent = ((step + 1) / steps.length) * 100;
     const fileFields: {
         label: string;
-        key: keyof Pick<
-            FormDataType,
-            "image_piece" | "image_doc_fiscal" | "image_cni_recto" | "image_cni_verso"
-            >;
+        key: keyof Pick<FormDataType,
+            "image_bc" | "image_bl" | "image_facture">;
     }[] = [
-        { label: "Image pièce", key: "image_piece" },
-        { label: "Image doc fiscal", key: "image_doc_fiscal" },
-        { label: "Image CNI recto", key: "image_cni_recto" },
-        { label: "Image CNI verso", key: "image_cni_verso" },
+        {label: "Image BC", key: "image_bc"},
+        {label: "Image BL", key: "image_bl"},
+        {label: "Image Facture", key: "image_facture"},
     ];
+    const FRAIS_PAR_SOUSCRIPTEUR = 2000;
+
+    const montantTotal =
+        formData.number_souscripteur * FRAIS_PAR_SOUSCRIPTEUR;
+    const formatMoney = (amount: number) =>
+        amount.toLocaleString("fr-FR") + " FCFA";
 
     return (
         <div className="min-h-screen bg-gray-100 pb-20 flex flex-col">
-            <Header />
-            <div className="bg-[#014d74] h-24" />
+            <Header/>
+            <div className="bg-[#014d74] h-24"/>
 
             <div className="max-w-md mx-auto flex justify-center -mt-10 px-4 rounded-xl w-full">
                 <div className="bg-white shadow-lg rounded-2xl p-6 w-full">
                     <h2 className="text-xl font-semibold text-center text-gray-800 mb-4">
-                        Création Point de Vente
+                        Création PMEs
                     </h2>
 
                     {/* Progress Bar */}
                     <div className="w-full bg-gray-200 h-2 rounded-full mb-4">
                         <div
                             className="bg-[#014d74] h-2 rounded-full transition-all duration-300"
-                            style={{ width: `${progressPercent}%` }}
+                            style={{width: `${progressPercent}%`}}
                         ></div>
                     </div>
 
                     <StepWizard
-                    
-                          instance={(wizard: any) => {
-                                wizardRef.current = wizard;
-                            }}
+
+                        instance={(wizard: any) => {
+                            wizardRef.current = wizard;
+                        }}
                         onStepChange={(stats: any) => setStep(stats.activeStep - 1)}
                     >
                         {/* Step 1 */}
+
+
 
                         <div className="space-y-3">
                             <div className="text-sm text-gray-700 bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
@@ -157,55 +174,68 @@ export default function CreatePVPage() {
                                 </p>
                                 <ul className="list-disc list-inside space-y-1">
                                     <li>Remplissez les informations de votre PME</li>
-                                    <li>Ajoutez les documents requis (Doc Fiscal, ID card, ...)</li>
-                                    <li>Validez le récapitulatif et effectuez le paiement (<strong>15000 FCFA</strong>)</li>
+                                    <li>Ajoutez les documents requis (BC, BL, Facture)</li>
+                                    <li>Validez le récapitulatif et effectuez le paiement (<strong>2000 FCFA / souscripteur</strong>)</li>
                                     <li>Ensuite, vous pouvez vendre de façon sécurisée sur notre plateforme en vous connectant avec votre téléphone</li>
                                 </ul>
                             </div>
                             <InputField
-                                id="name_promote"
-                                label="Nom Promoteur"
-                                placeholder="Ex: Jean Dupont"
-                                value={formData.name_promote}
-                                onChange={(v) => handleChange("name_promote", v)}
+                                id='name_entreprise'
+                                label="Nom de l'entreprise"
+                                value={formData.name_entreprise}
+                                onChange={(v) => handleChange("name_entreprise", v)}
                             />
+
                             <InputField
-                                id="phone"
-                                label="Téléphone promoteur"
-                                placeholder="Ex: 690123456"
-                                value={formData.phone}
-                                onChange={(v) => handleChange("phone", v)}
+                                id='name_responsable'
+                                label="Nom du responsable"
+                                value={formData.name_responsable}
+                                onChange={(v) => handleChange("name_responsable", v)}
                             />
+
                             <InputField
-                                id="name_salepoint"
-                                label="Nom point de vente"
-                                placeholder="Ex: Boutique centrale"
-                                value={formData.name_salepoint}
-                                onChange={(v) => handleChange("name_salepoint", v)}
+                                id='poste_responsable'
+                                label="Poste du responsable"
+                                value={formData.poste_responsable}
+                                onChange={(v) => handleChange("poste_responsable", v)}
                             />
+
                             <InputField
-                                id="activity"
-                                label="Activité"
-                                placeholder="Ex: Vente de téléphones"
-                                value={formData.activity}
-                                onChange={(v) => handleChange("activity", v)}
+                                id='amount_bc'
+                                label="Montant BC"
+                                value={formData.amount_bc.toString()}
+                                onChange={(v) => handleChange("amount_bc", Number(v))}
                             />
+
                             <InputField
-                                id="localisation"
-                                label="Localisation"
-                                placeholder="Ex: Douala, Cameroun"
-                                value={formData.localisation}
-                                onChange={(v) => handleChange("localisation", v)}
-                            /> 
-                             <InputField
-                                id="phonePv"
-                                label="Téléphone"
-                                placeholder="Ex: 690123456"
-                                value={formData.phonePv}
-                                onChange={(v) => handleChange("phonePv", v)}
+                                id='number_souscripteur'
+                                label="Nombre de souscripteurs"
+                                value={formData.number_souscripteur.toString()}
+                                onChange={(v) => handleChange("number_souscripteur", Number(v))}
                             />
-                          
-                            <p className="font-bold  text-gray-800 text-md">Frais de création de point de vente: 15000 FCFA</p>
+
+                            <InputField
+                                id='name_gestionnaire'
+                                label="Gestionnaire"
+                                value={formData.name_gestionnaire}
+                                onChange={(v) => handleChange("name_gestionnaire", v)}
+                            />
+
+                            <InputField
+                                id='name_manager'
+                                label="Manager"
+                                value={formData.name_manager}
+                                onChange={(v) => handleChange("name_manager", v)}
+                            />
+
+                            <InputField
+                                id='number_echeance_paiement'
+                                label="Nombre d’échéances"
+                                value={formData.number_echeance_paiement.toString()}
+                                onChange={(v) => handleChange("number_echeance_paiement", Number(v))}
+                            />
+
+                            <p className="font-bold  text-gray-800 text-md">Frais 2000 FCFA / souscripteurs</p>
                         </div>
 
                         {/* Step 2 */}
@@ -220,39 +250,51 @@ export default function CreatePVPage() {
                             ))}
                         </div>
 
-                        {/*     <div className="space-y-3">
-                            {[
-                                { label: "Image pièce", key: "image_piece" },
-                                { label: "Image doc fiscal", key: "image_doc_fiscal" },
-                                { label: "Image CNI recto", key: "image_cni_recto" },
-                                { label: "Image CNI verso", key: "image_cni_verso" },
-                            ].map((field) => (
-                                <FileField
-                                    key={field.key}
-                                    label={field.label}
-                                    file={formData[field.key as keyof typeof formData]}
-                                    onChange={(f) => handleChange(field.key, f)}
-                                />
-                            ))}
-                        </div>*/}
-
                         {/* Step 3 */}
                         <div className="space-y-3">
-                            <p className="text-lg font-medium text-gray-800 text-center mb-2">Aperçu des informations</p>
+                            <p className="text-lg font-medium text-gray-800 text-center mb-2">Aperçu des
+                                informations</p>
 
                             {/* Texte */}
                             {[
-                                { label: "Nom Promoteur", value: formData.name_promote },
-                                { label: "Nom point de vente", value: formData.name_salepoint },
-                                { label: "Activité", value: formData.activity },
-                                { label: "Numéro de téléphone", value: formData.phone },
-                                { label: "Localisation", value: formData.localisation },
+                                {label: "Entreprise", value: formData.name_entreprise},
+                                {label: "Responsable", value: formData.name_responsable},
+                                {label: "Poste", value: formData.poste_responsable},
+                                {label: "Montant BC", value: formData.amount_bc},
+                                {label: "Manager", value: formData.name_manager},
+                                {label: "Gestionnaire DSC", value: formData.name_gestionnaire},
+                                {label: "Souscripteurs", value: formData.number_souscripteur},
+                                {label: "Échéances", value: formData.number_echeance_paiement},
                             ].map((field) => (
                                 <div key={field.label} className="flex justify-between border-b border-gray-200 py-1">
                                     <span className="font-medium text-gray-700">{field.label}:</span>
                                     <span className="text-gray-800">{field.value || "-"}</span>
                                 </div>
                             ))}
+                            <div className="border-b pt-3 mt-3 pb-2 space-y-2 mb-4">
+                                <div className="flex justify-between">
+    <span className="font-medium text-gray-700">
+      Frais par souscripteur
+    </span>
+                                    <span className="text-gray-800">
+      {formatMoney(2000)}
+    </span>
+                                </div>
+
+                                <div className="flex justify-between">
+    <span className="font-medium text-gray-700">
+      Nombre de souscripteurs
+    </span>
+                                    <span className="text-gray-800">
+      {formData.number_souscripteur}
+    </span>
+                                </div>
+
+                                <div className="flex justify-between text-lg font-bold text-[#014d74]">
+                                    <span>Montant total à payer</span>
+                                    <span>{formatMoney(montantTotal)}</span>
+                                </div>
+                            </div>
                             {/* Choix de la plateforme */}
                             <div className="grid grid-cols-2 gap-4 mb-6">
                                 {[
@@ -288,37 +330,37 @@ export default function CreatePVPage() {
                             {/* Téléphone */}
                             <div className="mb-5">
                                 <InputField
-                                    id="phonePayment"
+                                    id="phone"
                                     label="Numéro de paiement :"
-                                    value={formData.phonePayment}
-                                    onChange={(v) => handleChange("phonePayment", v)}
+                                    value={formData.phone}
+                                    onChange={(v) => handleChange("phone", v)}
                                     placeholder="Ex: 6XXXXXXXX"
                                 />
 
                             </div>
                             {/* Images en grille 2 colonnes */}
                             <div className="mb-3">
-                                  <div className="grid grid-cols-2 gap-4 mt-2">
-                                {[
-                                    { label: "Image pièce", file: formData.image_piece },
-                                    { label: "Image doc fiscal", file: formData.image_doc_fiscal },
-                                    { label: "Image CNI recto", file: formData.image_cni_recto },
-                                    { label: "Image CNI verso", file: formData.image_cni_verso },
-                                ].map((img) =>
-                                    img.file ? (
-                                        <div key={img.label} className="flex flex-col items-center">
-                                            <span className="font-medium text-gray-700 mb-1 text-sm">{img.label}</span>
-                                            <img
-                                                src={URL.createObjectURL(img.file)}
-                                                alt={img.label}
-                                                className="w-full object-cover rounded border border-gray-300"
-                                            />
-                                        </div>
-                                    ) : null
-                                )}
+                                <div className="grid grid-cols-2 gap-4 mt-2">
+                                    {[
+                                        {label: "Image pièce", file: formData.image_bc},
+                                        {label: "Image doc fiscal", file: formData.image_bl},
+                                        {label: "Image CNI recto", file: formData.image_facture},
+                                    ].map((img) =>
+                                        img.file ? (
+                                            <div key={img.label} className="flex flex-col items-center">
+                                                <span
+                                                    className="font-medium text-gray-700 mb-1 text-sm">{img.label}</span>
+                                                <img
+                                                    src={URL.createObjectURL(img.file)}
+                                                    alt={img.label}
+                                                    className="w-full object-cover rounded border border-gray-300"
+                                                />
+                                            </div>
+                                        ) : null
+                                    )}
+                                </div>
                             </div>
-                            </div>
-                          
+
                         </div>
 
                     </StepWizard>
@@ -346,7 +388,7 @@ export default function CreatePVPage() {
                                 onClick={handleSubmit}
                                 disabled={submitting}
                                 className={`px-4 py-2 rounded-lg text-white ${submitting ? "bg-gray-400 cursor-not-allowed" : "bg-[#014d74] hover:bg-[#013d5a]"
-                                    }`}
+                                }`}
                             >
                                 {submitting ? "Enregistrement..." : "Enregistrer"}
                             </button>
@@ -355,7 +397,7 @@ export default function CreatePVPage() {
                 </div>
             </div>
 
-            <BottomNav />
+            <BottomNav/>
         </div>
     );
 }

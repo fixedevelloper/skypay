@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { Home, UserCheck2, ShoppingCart, ReceiptText, HelpCircle, Lock } from "lucide-react";
+import { Home, UserCheck2, ShoppingCart, ReceiptText, HelpCircle, Lock,Package2Icon } from "lucide-react";
 
 type NavItem = {
   name: string;
@@ -24,7 +24,8 @@ console.log(userRole)
     { name: "Creation PV", path: "/create-pv", icon: UserCheck2, role: "all" },
     { name: "Achats", path: "/achats", icon: ShoppingCart, role: "customer" },
     { name: "Facture", path: "/factures", icon: ReceiptText, role: "all" },
-    { name: "Aide", path: "/help", icon: HelpCircle, role: "all" },
+    { name: "Creation PMEs", path: "/create-pmes", icon: Package2Icon, role: "all" },
+    //{ name: "Aide", path: "/help", icon: HelpCircle, role: "all" },
   ];
 
   return (

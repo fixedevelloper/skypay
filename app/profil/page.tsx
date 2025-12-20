@@ -2,7 +2,7 @@
 
 import BottomNav from "@/app/components/BottomNav";
 import Header from "@/app/components/Header";
-import { ShoppingBagIcon, SquareChevronUp, UserCog2Icon } from "lucide-react";
+import { ShoppingBagIcon, SquareChevronUp, UserCog2Icon,PlusSquareIcon,HelpCircleIcon } from "lucide-react";
 import Link from "next/link";
 
 export default function Profil() {
@@ -12,6 +12,18 @@ export default function Profil() {
       icon: <ShoppingBagIcon className="w-6 h-6 text-[#014d74]" />,
       description: "Consultez l’historique de vos commandes et paiements.",
       link:'achats'
+    },
+    {
+      title: "Nouvelle Vente",
+      icon: <PlusSquareIcon className="w-6 h-6 text-[#014d74]" />,
+      description: "Effectuer une nouvelle vente.",
+      link:'nouvelle-vente'
+    },
+    {
+      title: "Aide",
+      icon: <HelpCircleIcon className="w-6 h-6 text-[#014d74]" />,
+      description: "Aide",
+      link:'help'
     },
     {
       title: "Mot de passe",

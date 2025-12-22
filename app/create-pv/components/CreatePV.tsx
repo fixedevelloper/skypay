@@ -127,7 +127,7 @@ export default function CreatePVPage() {
             <Header />
             <div className="bg-[#014d74] h-24" />
 
-            <div className="max-w-md mx-auto flex justify-center -mt-10 px-4 rounded-xl w-full">
+            <div className="mx-auto flex justify-center -mt-10 px-4 rounded-xl w-full ">
                 <div className="bg-white shadow-lg rounded-2xl p-6 w-full">
                     <h2 className="text-xl font-semibold text-center text-gray-800 mb-4">
                         Création Point de Vente
@@ -162,6 +162,7 @@ export default function CreatePVPage() {
                                     <li>Ensuite, vous pouvez vendre de façon sécurisée sur notre plateforme en vous connectant avec votre téléphone</li>
                                 </ul>
                             </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <InputField
                                 id="name_promote"
                                 label="Nom Promoteur"
@@ -204,12 +205,12 @@ export default function CreatePVPage() {
                                 value={formData.phonePv}
                                 onChange={(v) => handleChange("phonePv", v)}
                             />
-                          
+                            </div>
                             <p className="font-bold  text-gray-800 text-md">Frais de création de point de vente: 15000 FCFA</p>
                         </div>
 
                         {/* Step 2 */}
-                        <div className="space-y-3">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {fileFields.map((field) => (
                                 <FileField
                                     key={field.key}
@@ -219,22 +220,6 @@ export default function CreatePVPage() {
                                 />
                             ))}
                         </div>
-
-                        {/*     <div className="space-y-3">
-                            {[
-                                { label: "Image pièce", key: "image_piece" },
-                                { label: "Image doc fiscal", key: "image_doc_fiscal" },
-                                { label: "Image CNI recto", key: "image_cni_recto" },
-                                { label: "Image CNI verso", key: "image_cni_verso" },
-                            ].map((field) => (
-                                <FileField
-                                    key={field.key}
-                                    label={field.label}
-                                    file={formData[field.key as keyof typeof formData]}
-                                    onChange={(f) => handleChange(field.key, f)}
-                                />
-                            ))}
-                        </div>*/}
 
                         {/* Step 3 */}
                         <div className="space-y-3">

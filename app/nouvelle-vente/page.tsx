@@ -10,6 +10,7 @@ import Header from "../components/Header";
 import PhoneGrid from "../components/PhoneGrid";
 import CustomModal from "../components/CustomModal";
 import BottomNav from "../components/BottomNav";
+import {useSnackbar} from "notistack";
 
 export default function NewSellPage() {
     const router = useRouter();
@@ -19,12 +20,20 @@ export default function NewSellPage() {
     const [customModalOpen, setCustomModalOpen] = useState(false);
     const [customName, setCustomName] = useState("");
     const [customPrice, setCustomPrice] = useState("");
-    const { data: session } = useSession();
-
+    const { data: session,status } = useSession();
+    const { enqueueSnackbar } = useSnackbar();
     useEffect(() => {
-/*        if(session.user.role !=='vendor') {
-            router.push('/home')
-        }*/
+        if (status === "loading") return;
+
+        if (!session || session.user?.role !== "vendor") {
+            enqueueSnackbar(
+                "Cette fonctionnalité est réservée aux vendeurs. Veuillez changer de compte.",
+                { variant: "error" }
+            );
+
+            router.replace("/");
+            return;
+        }
         const fetchProducts = async () => {
             try {
                 const res = await axiosServices.get<Phone[]>("/api/products");

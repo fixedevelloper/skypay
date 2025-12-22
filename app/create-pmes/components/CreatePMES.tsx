@@ -142,8 +142,9 @@ export default function CreatePMESPage() {
             <Header/>
             <div className="bg-[#014d74] h-24"/>
 
-            <div className="max-w-md mx-auto flex justify-center -mt-10 px-4 rounded-xl w-full">
-                <div className="bg-white shadow-lg rounded-2xl p-6 w-full">
+            <div className="mx-auto flex justify-center -mt-10 px-4 rounded-xl w-full ">
+
+            <div className="bg-white shadow-lg rounded-2xl p-6 w-full">
                     <h2 className="text-xl font-semibold text-center text-gray-800 mb-4">
                         Création PMEs
                     </h2>
@@ -167,79 +168,47 @@ export default function CreatePMESPage() {
 
 
 
-                        <div className="space-y-3">
-                            <div className="text-sm text-gray-700 bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                        <div className="space-y-4">
+
+                            {/* Bloc description → pleine largeur */}
+                            <div className="md:col-span-2 text-sm text-gray-700 bg-blue-50 border border-blue-200 rounded-lg p-4">
                                 <p className="font-semibold text-[#014d74] mb-2">
                                     ℹ️ Comment ça marche ?
                                 </p>
                                 <ul className="list-disc list-inside space-y-1">
                                     <li>Remplissez les informations de votre PME</li>
                                     <li>Ajoutez les documents requis (BC, BL, Facture)</li>
-                                    <li>Validez le récapitulatif et effectuez le paiement (<strong>2000 FCFA / souscripteur</strong>)</li>
-                                    <li>Ensuite, vous pouvez vendre de façon sécurisée sur notre plateforme en vous connectant avec votre téléphone</li>
+                                    <li>
+                                        Validez le récapitulatif et effectuez le paiement
+                                        (<strong>2000 FCFA / souscripteur</strong>)
+                                    </li>
+                                    <li>
+                                        Ensuite, vous pouvez vendre de façon sécurisée sur notre plateforme
+                                        en vous connectant avec votre téléphone
+                                    </li>
                                 </ul>
                             </div>
-                            <InputField
-                                id='name_entreprise'
-                                label="Nom de l'entreprise"
-                                value={formData.name_entreprise}
-                                onChange={(v) => handleChange("name_entreprise", v)}
-                            />
 
-                            <InputField
-                                id='name_responsable'
-                                label="Nom du responsable"
-                                value={formData.name_responsable}
-                                onChange={(v) => handleChange("name_responsable", v)}
-                            />
+                            {/* Champs */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <InputField   id="activity" label="Nom de l'entreprise" value={formData.name_entreprise} onChange={(v) => handleChange("name_entreprise", v)} />
+                                <InputField   id="activity" label="Nom du responsable" value={formData.name_responsable} onChange={(v) => handleChange("name_responsable", v)} />
+                                <InputField   id="activity" label="Poste du responsable" value={formData.poste_responsable} onChange={(v) => handleChange("poste_responsable", v)} />
+                                <InputField   id="activity" label="Montant BC" value={formData.amount_bc.toString()} onChange={(v) => handleChange("amount_bc", Number(v))} />
+                                <InputField   id="activity" label="Nombre de souscripteurs" value={formData.number_souscripteur.toString()} onChange={(v) => handleChange("number_souscripteur", Number(v))} />
+                                <InputField   id="activity" label="Gestionnaire" value={formData.name_gestionnaire} onChange={(v) => handleChange("name_gestionnaire", v)} />
+                                <InputField   id="activity" label="Manager" value={formData.name_manager} onChange={(v) => handleChange("name_manager", v)} />
+                                <InputField   id="activity" label="Nombre d’échéances" value={formData.number_echeance_paiement.toString()} onChange={(v) => handleChange("number_echeance_paiement", Number(v))} />
+                            </div>
 
-                            <InputField
-                                id='poste_responsable'
-                                label="Poste du responsable"
-                                value={formData.poste_responsable}
-                                onChange={(v) => handleChange("poste_responsable", v)}
-                            />
-
-                            <InputField
-                                id='amount_bc'
-                                label="Montant BC"
-                                value={formData.amount_bc.toString()}
-                                onChange={(v) => handleChange("amount_bc", Number(v))}
-                            />
-
-                            <InputField
-                                id='number_souscripteur'
-                                label="Nombre de souscripteurs"
-                                value={formData.number_souscripteur.toString()}
-                                onChange={(v) => handleChange("number_souscripteur", Number(v))}
-                            />
-
-                            <InputField
-                                id='name_gestionnaire'
-                                label="Gestionnaire"
-                                value={formData.name_gestionnaire}
-                                onChange={(v) => handleChange("name_gestionnaire", v)}
-                            />
-
-                            <InputField
-                                id='name_manager'
-                                label="Manager"
-                                value={formData.name_manager}
-                                onChange={(v) => handleChange("name_manager", v)}
-                            />
-
-                            <InputField
-                                id='number_echeance_paiement'
-                                label="Nombre d’échéances"
-                                value={formData.number_echeance_paiement.toString()}
-                                onChange={(v) => handleChange("number_echeance_paiement", Number(v))}
-                            />
-
-                            <p className="font-bold  text-gray-800 text-md">Frais 2000 FCFA / souscripteurs</p>
+                            <p className="md:col-span-2 font-bold text-gray-800 text-md">
+                                Frais 2000 FCFA / souscripteurs
+                            </p>
                         </div>
 
+
                         {/* Step 2 */}
-                        <div className="space-y-3">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {fileFields.map((field) => (
                                 <FileField
                                     key={field.key}
@@ -249,6 +218,7 @@ export default function CreatePMESPage() {
                                 />
                             ))}
                         </div>
+
 
                         {/* Step 3 */}
                         <div className="space-y-3">

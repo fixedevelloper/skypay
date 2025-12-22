@@ -114,6 +114,12 @@ export default function RegisterGuest() {
             {loading ? "Inscription..." : "S'inscrire"}
           </button>
         </form>
+            <div className="mt-4 text-center text-sm">
+                <span className='text-[#014d74] hover:text-[#013d5a]'>Vous avez déjà un compte ?{" "}</span>
+                <a href="/auth/singin" className="text-[#014d74] font-medium hover:underline">
+                    Se connecter
+                </a>
+            </div>
         </div>
       </div>
       <BottomNav />

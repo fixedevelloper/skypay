@@ -4,8 +4,16 @@ import { Tab } from "@headlessui/react";
 import Link from "next/link";
 import Image from "next/image";
 import React from "react";
-
-const items = [
+export type HomeItem = {
+    title: string;
+    icon: string;
+    href: string;
+    tab: "forYou" | "vendors";
+};
+type GridProps = {
+    items: HomeItem[];
+};
+const items: HomeItem[] = [
     { title: "Achat", icon: "/icons/shopping-cart.svg", href: "/product-achats", tab: "forYou" },
     { title: "Commercial", icon: "/icons/sale-tag.svg", href: "/product-commercial", tab: "forYou" },
     { title: "Vente PV", icon: "/icons/exchange.svg", href: "/product-pv", tab: "vendors" },
@@ -14,6 +22,7 @@ const items = [
     { title: "Mon profil", icon: "/icons/user-list.svg", href: "/profil", tab: "forYou" },
     { title: "Mon commercial", icon: "/icons/cca.jpeg", href: "/product-cca", tab: "forYou" },
 ];
+
 
 export default function HomeGrid() {
     const forYou = items.filter(i => i.tab === "forYou");
@@ -50,15 +59,22 @@ export default function HomeGrid() {
     );
 }
 
-function Grid({ items:any }: { items: typeof items }) {
+function Grid({ items }: GridProps) {
     return (
         <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-4 gap-4 px-2">
-            {items.map((item, index) => (
-                <Link key={index} href={item.href}>
-                    <div className="bg-white rounded-2xl shadow-md p-2 hover:shadow-xl hover:-translate-y-1 transition">
+            {items.map(item => (
+                <Link key={item.href} href={item.href}>
+                    <div className="bg-white rounded-2xl shadow-md p-2 transition hover:shadow-xl hover:-translate-y-1 active:scale-95">
                         <div className="flex items-center justify-center h-20 bg-gray-100 rounded-xl">
-                            <Image src={item.icon} alt={item.title} width={48} height={48} />
+                            <Image
+                                src={item.icon}
+                                alt={item.title}
+                                width={48}
+                                height={48}
+                                className="object-contain"
+                            />
                         </div>
+
                         <h3 className="mt-3 text-sm font-semibold text-center truncate text-gray-800">
                             {item.title}
                         </h3>

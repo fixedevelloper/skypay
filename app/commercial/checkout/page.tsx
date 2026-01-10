@@ -65,23 +65,21 @@ export default function Checkout() {
         setStatus("PENDING");
 
         try {
-            const response = await axiosServices.post("/api/purchases/commercial", {
-                product_id: selectItem?.product_id,
-                product_name: productName,
-                is_custom: selectItem?.is_custom,
-                is_cash: selectItem?.is_cash,
-                platform,
-                phone,
-                amount,
+            const response = await axiosServices.post("/api/orders", {
                 user_id: session?.user?.id,
-                customer_name:customerName,
-                customer_phone:selectCommercial.customerPhone,
-                customer_localisation:selectCommercial.customerLocalisation,
-                customer_activity:selectCommercial.customerActivity,
-                sale_point:selectCommercial.pointVente,
-                manager:selectCommercial.manager,
+                operator: platform, // correspond à 'operator' côté backend
+                items: [{
+                    product_id: selectItem?.product_id,
+                    quantity:  1, // assure une quantité
+                }],
+                meta: { phone,
+                    customer_name:customerName,
+                    customer_phone:selectCommercial.customerPhone,
+                    customer_localisation:selectCommercial.customerLocalisation,
+                    customer_activity:selectCommercial.customerActivity,
+                    sale_point:selectCommercial.pointVente,
+                    manager:selectCommercial.manager, } // plus clair et extensible
             });
-
             const data = response.data; 
 
             if (data.referenceId) {

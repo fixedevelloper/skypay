@@ -1,8 +1,8 @@
 'use client'
 
 import { Phone } from "../types/types";
-import CustomPhoneCard from "./CustomPhoneCard";
 import PhoneCard from "./PhoneCard";
+import React from "react";
 
 interface PhoneGridProps {
   phones: Phone[];
@@ -16,8 +16,5 @@ export default function PhoneGrid({ phones, baseImage, onChoice }: PhoneGridProp
       {phones.map(phone => (
         <PhoneCard key={phone.id} phone={phone} baseImage={baseImage} onChoice={onChoice} />
       ))}
-
-      {/* Carte Custom */}
-      <CustomPhoneCard onChoice={onChoice} />
     </div>
   );}

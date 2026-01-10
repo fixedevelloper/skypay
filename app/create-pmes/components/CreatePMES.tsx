@@ -4,12 +4,14 @@ import FileField from "@/app/components/FileInput";
 import Header from "@/app/components/Header";
 import InputField from "@/app/components/InputField";
 import {useRouter} from "next/navigation";
-import React, {useState, useRef} from "react";
+import React, {useState, useRef, useEffect} from "react";
 import StepWizard from "react-step-wizard";
 import mtn from "@/public/icons/momo_mtnb.png";
 import orange from "@/public/icons/orange.png";
 import Image from "next/image";
 import axiosServices from "../../lib/axios";
+import {enqueueSnackbar} from "notistack";
+import {useSession} from "next-auth/react";
 
 type FormDataType = {
     name_entreprise: string;
@@ -27,16 +29,25 @@ type FormDataType = {
     image_bc: File | null;
     image_bl: File | null;
     image_facture: File | null;
+    image_avi:File | null;
+    image_contact1: File | null;
+    image_contact2:File | null;
+    image_plan_localisation:File | null;
 };
 
 
 export default function CreatePMESPage() {
     const router = useRouter();
+    const { data: session, status:statut } = useSession();
     const [formData, setFormData] = useState<FormDataType>({
         amount_bc: 0,
         image_bc: null,
         image_bl: null,
         image_facture: null,
+        image_avi: null,
+        image_contact1: null,
+        image_contact2: null,
+        image_plan_localisation: null,
         name_entreprise: "",
         name_gestionnaire: "",
         name_manager: "",
@@ -63,7 +74,37 @@ export default function CreatePMESPage() {
 
     const onNext = () => wizardRef.current?.nextStep();
     const onBack = () => wizardRef.current?.previousStep();
+    useEffect(() => {
+        if (statut === "loading") return;
 
+        if (!session?.user) {
+            enqueueSnackbar("Veuillez vous connecter", { variant: "warning" });
+            router.replace("/auth/signin");
+            return;
+        }
+
+        const roles: string[] = session.user.roles || [];
+
+        // ❌ Client simple → pas accès
+        if (roles.includes("customer")) {
+            enqueueSnackbar(
+                "Vous n'avez pas accès à cette page, veuillez créer un point de vente",
+                { variant: "error" }
+            );
+            router.replace("/commercial");
+            return;
+        }
+
+        // ❌ Pas commercial
+        if (!roles.includes("pme")) {
+            enqueueSnackbar("Vous n'avez pas accès à cette page", {
+                variant: "error",
+            });
+            router.replace("/");
+            return;
+        }
+
+    }, [session, statut, router]);
     const handleSubmit = async () => {
         setSubmitting(true);
         setError(null);
@@ -96,6 +137,10 @@ export default function CreatePMESPage() {
                     image_bc: null,
                     image_bl: null,
                     image_facture: null,
+                    image_avi: null,
+                    image_contact1: null,
+                    image_contact2: null,
+                    image_plan_localisation: null,
                     name_entreprise: "",
                     name_gestionnaire: "",
                     name_manager: "",
@@ -124,11 +169,15 @@ export default function CreatePMESPage() {
     const fileFields: {
         label: string;
         key: keyof Pick<FormDataType,
-            "image_bc" | "image_bl" | "image_facture">;
+            "image_bc" | "image_bl" | "image_facture" | "image_avi" | "image_contact1" | "image_contact2" | "image_plan_localisation">;
     }[] = [
         {label: "Image BC", key: "image_bc"},
         {label: "Image BL", key: "image_bl"},
         {label: "Image Facture", key: "image_facture"},
+        {label: "Image AVI", key: "image_avi"},
+        {label: "Image Contact1", key: "image_contact1"},
+        {label: "Image Contact2", key: "image_contact2"},
+        {label: "Plan de localisation", key: "image_plan_localisation"},
     ];
     const FRAIS_PAR_SOUSCRIPTEUR = 2000;
 

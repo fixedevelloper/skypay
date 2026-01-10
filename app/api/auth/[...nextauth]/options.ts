@@ -41,7 +41,7 @@ export const authOptions: NextAuthOptions = {
                             name: result.data.name,
                             phone: result.data.phone || null,
                             token: result.data.token,
-                            role: result.data.role || "user",
+                            roles: result.data.roles || "customer",
                         };
                     }
 
@@ -67,7 +67,7 @@ export const authOptions: NextAuthOptions = {
             if (user) {
                 token.token = user.token;
                 token.phone = user.phone;
-                token.role = user.role;
+                token.roles = user.roles;
                 token.photoURL = user.photoURL;
                 token.balance = user.balance;
             }
@@ -79,7 +79,7 @@ export const authOptions: NextAuthOptions = {
                 session.user.id = token.sub!;
                 session.user.token = token.token;
                 session.user.phone = token.phone;
-                session.user.role = token.role;
+                session.user.roles = token.roles;
                 session.user.photoURL = token.photoURL;
                 session.user.balance = token.balance;
             }

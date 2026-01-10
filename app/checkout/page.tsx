@@ -50,15 +50,14 @@ const handleValidate = async () => {
   setStatus("PENDING");
 
   try {
-    const response = await axiosServices.post("/api/purchases/customer", {
-      product_id: selectItem?.product_id,
-      product_name: productName,
-      is_custom: selectItem?.is_custom,
-      is_cash: selectItem?.is_cash,
-      platform,
-      phone,
-      amount,
+    const response = await axiosServices.post("/api/orders", {
       user_id: session?.user?.id,
+      operator: platform, // correspond à 'operator' côté backend
+      items: [{
+        product_id: selectItem?.product_id,
+        quantity:  1, // assure une quantité
+      }],
+      meta: { phone } // plus clair et extensible
     });
 
     const data = response.data; // ✅ Correction ici

@@ -13,7 +13,7 @@ declare module "next-auth" {
         id?: string;
         token?: string;
         phone?: string;
-        role?: string;
+        roles?: string[];
         photoURL?: string;
         balance?: number;
     }
@@ -23,7 +23,7 @@ declare module "next-auth/jwt" {
     interface JWT {
         token?: string;
         phone?: string;
-        role?: string;
+        roles?: string[];
         photoURL?: string;
         balance?: number;
     }

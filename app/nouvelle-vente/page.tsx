@@ -10,7 +10,7 @@ import Header from "../components/Header";
 import PhoneGrid from "../components/PhoneGrid";
 import CustomModal from "../components/CustomModal";
 import BottomNav from "../components/BottomNav";
-import {useSnackbar} from "notistack";
+import {enqueueSnackbar, useSnackbar} from "notistack";
 
 export default function NewSellPage() {
     const router = useRouter();
@@ -25,15 +25,36 @@ export default function NewSellPage() {
     useEffect(() => {
         if (status === "loading") return;
 
-        if (!session || session.user?.role !== "vendor") {
+        if (!session?.user) {
+            enqueueSnackbar("Veuillez vous connecter", { variant: "warning" });
+            router.replace("/auth/signin");
+            return;
+        }
+
+        const roles: string[] = session.user.roles || [];
+        console.log(session?.user)
+        // ❌ Client simple → pas accès
+        if (roles.includes("customer")) {
             enqueueSnackbar(
-                "Cette fonctionnalité est réservée aux vendeurs. Veuillez changer de compte.",
+                "Vous n'avez pas accès à cette page, veuillez créer un point de vente",
                 { variant: "error" }
             );
+            router.replace("/commercial");
+            return;
+        }
 
+        // ❌ Pas commercial
+        if (!roles.includes("vendor")) {
+            enqueueSnackbar("Vous n'avez pas accès à cette page", {
+                variant: "error",
+            });
             router.replace("/");
             return;
         }
+
+    }, [session, status, router]);
+    useEffect(() => {
+        if (status === "loading") return;
         const fetchProducts = async () => {
             try {
                 const res = await axiosServices.get<Phone[]>("/api/products");

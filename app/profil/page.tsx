@@ -7,7 +7,7 @@ import Link from "next/link";
 
 export default function Profil() {
   const options = [
-    {
+/*    {
       title: "Mes achats",
       icon: <ShoppingBagIcon className="w-6 h-6 text-[#014d74]" />,
       description: "Consultez l’historique de vos commandes et paiements.",
@@ -18,7 +18,7 @@ export default function Profil() {
       icon: <PlusSquareIcon className="w-6 h-6 text-[#014d74]" />,
       description: "Effectuer une nouvelle vente.",
       link:'nouvelle-vente'
-    },
+    },*/
     {
       title: "Aide",
       icon: <HelpCircleIcon className="w-6 h-6 text-[#014d74]" />,

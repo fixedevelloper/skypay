@@ -23,7 +23,9 @@ export default function Header() {
       }
 
       {/* Logo */}
+        <Link href="/">
       <Image src="/logo.png" alt="Logo" width={100} height={100} />
+        </Link>
 
       {/* Connexion / Déconnexion */}
       <div className="relative">

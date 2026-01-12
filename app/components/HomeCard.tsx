@@ -20,7 +20,7 @@ const items: HomeItem[] = [
     { title: "Distributeur", icon: "/icons/arrow.svg", href: "/product-distribution", tab: "vendors" },
     { title: "Vente PMEs", icon: "/icons/build-busines.svg", href: "/create-pmes", tab: "vendors" },
     { title: "Mon profil", icon: "/icons/user-list.svg", href: "/profil", tab: "forYou" },
-    { title: "Mon commercial", icon: "/icons/cca.jpeg", href: "/product-cca", tab: "forYou" },
+    { title: "Gestionnaire", icon: "/icons/cca.jpeg", href: "/product-cca", tab: "forYou" },
 ];
 
 
@@ -48,8 +48,21 @@ export default function HomeGrid() {
             {/* PANELS */}
             <Tab.Panels>
                 <Tab.Panel>
-                    <Grid items={forYou} />
+                    <Grid
+                        items={forYou}
+                        appendExtra={
+                            <Image
+                                src="/icons/cca-billet.jpeg"
+                                alt="cca"
+                                width={450}
+                                height={300}
+                                className="object-cover w-full h-full"
+                            />
+                        }
+                    />
+
                 </Tab.Panel>
+
 
                 <Tab.Panel>
                     <Grid items={vendors} />
@@ -59,7 +72,7 @@ export default function HomeGrid() {
     );
 }
 
-function Grid({ items }: GridProps) {
+function Grid({ items, appendExtra }: GridProps & { appendExtra?: React.ReactNode }) {
     return (
         <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-4 gap-4 px-2">
             {items.map(item => (
@@ -74,13 +87,22 @@ function Grid({ items }: GridProps) {
                                 className="object-contain"
                             />
                         </div>
-
                         <h3 className="mt-3 text-sm font-semibold text-center truncate text-gray-800">
                             {item.title}
                         </h3>
                     </div>
                 </Link>
             ))}
+
+            {/* Image occupant 2 colonnes */}
+            {appendExtra && (
+                <div className="col-span-2 flex items-center justify-center min-h-[120px] w-full">
+                    {appendExtra}
+                </div>
+            )}
         </div>
     );
 }
+
+
+

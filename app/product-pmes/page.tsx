@@ -37,7 +37,7 @@ export default function Page() {
                 "Vous n'avez pas accès à cette page, veuillez créer un point de vente",
                 { variant: "error" }
             );
-            router.replace("/commercial");
+            router.replace("/");
             return;
         }
 

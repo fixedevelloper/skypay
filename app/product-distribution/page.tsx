@@ -93,8 +93,9 @@ export default function Page() {
     return (
         <div className="min-h-screen bg-gray-100 pb-20">
             <Header />
-            <div className="bg-[#014d74] h-24" />
-
+            <div className="bg-gradient-to-r from-[#014d74] to-[#0F766E] h-38 rounded-b-3xl shadow-md flex items-center justify-center">
+                <h2 className="text-2xl font-bold text-blue-700">Produits</h2>
+            </div>
             <PhoneList
                 phones={phones}
                 baseImage={BASE_IMAGE}

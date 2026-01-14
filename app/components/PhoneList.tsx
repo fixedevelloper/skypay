@@ -45,7 +45,7 @@ export default function PhoneList({ phones, baseImage }: PhoneListProps) {
     };
 
     return (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 p-3">
             {phones.map((phone) => (
                 <PhoneCardList
                     key={phone.id}

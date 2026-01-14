@@ -63,13 +63,11 @@ export default function CheckoutList() {
       const response = await axiosServices.post("/api/orders", {
         user_id: session?.user?.id,
         operator: platform,
-
         items: products.map(p => ({
           product_id: p.product_id,
           quantity: p.quantity ?? 1,
         })),
-        meta: {  mode: 'distribute',
-          phone } // plus clair et extensible
+        meta: { phone } // plus clair et extensible
       });
 
 
@@ -78,7 +76,7 @@ export default function CheckoutList() {
       if (data?.id) {
         // Stocke la référence de commande
         localStorage.setItem("referenceId", data.reference_id.toString());
-        router.push("/achats");
+        router.push("/checkout/waiting-pay");
       } else {
         throw new Error("Aucune référence de commande reçue.");
       }
@@ -103,6 +101,38 @@ export default function CheckoutList() {
               💳 Paiement du téléphone
             </h2>
 
+            {/* Choix de la plateforme */}
+            <div className="grid grid-cols-2 gap-4 mb-6">
+              {[
+                { name: "MTN", img: mtn },
+                { name: "ORANGE", img: orange },
+              ].map(({ name, img }) => (
+                  <button
+                      key={name}
+                      onClick={() => setPlatform(name as "MTN" | "ORANGE")}
+                      className={`flex flex-col items-center justify-center rounded-xl border-2 bg-white p-3 transition-all ${
+                          platform === name
+                              ? "border-[#014d74] shadow-lg scale-105"
+                              : "border-gray-300 hover:border-[#014d74]/50"
+                      }`}
+                  >
+                    <Image
+                        src={img}
+                        alt={`${name} Money`}
+                        width={70}
+                        height={70}
+                        className="object-contain"
+                    />
+                    <span
+                        className={`mt-2 text-sm font-semibold ${
+                            platform === name ? "text-[#014d74]" : "text-gray-600"
+                        }`}
+                    >
+                  {name} Money
+                </span>
+                  </button>
+              ))}
+            </div>
 
             {/* Liste des produits */}
             {products.length === 0 ? (
@@ -119,7 +149,7 @@ export default function CheckoutList() {
                       <div className="flex-1">
                         <p className="text-sm text-gray-500">Article sélectionné</p>
                         <h3 className="font-bold text-gray-800 text-lg">{p.phone}</h3>
-
+                     {/*   <p className="text-blue-600 font-semibold">{p.amount?.toLocaleString()} FCFA</p>*/}
                       </div>
                     </div>
                 ))
@@ -139,6 +169,16 @@ export default function CheckoutList() {
                   onChange={(e) => setPhone(e.target.value)}
               />
             </div>
+
+            {/* Montant total */}
+        {/*    <div className="mb-6 text-center">
+              <label className="font-medium text-gray-700 block">
+                Montant à payer :
+              </label>
+              <div className="mt-2 text-3xl font-bold text-[#014d74]">
+             {totalAmount.toLocaleString()} <span className="text-sm">FCFA</span>
+              </div>
+            </div>*/}
 
             {/* Boutons */}
             <div className="flex flex-col sm:flex-row gap-4">

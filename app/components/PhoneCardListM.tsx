@@ -9,7 +9,7 @@ interface PhoneCardListProps {
     onUpdate: (phone: Phone, quantity: number, checked: boolean) => void;
 }
 
-export default function PhoneCardList({
+export default function PhoneCardListM({
                                           phone,
                                           baseImage = "",
                                           onUpdate,
@@ -40,7 +40,7 @@ export default function PhoneCardList({
 
     return (
 
-        <div className="flex flex-row items-center gap-3 bg-white rounded-xl shadow-sm p-3 px-3 hover:shadow-md transition w-full">
+ <div className="flex flex-col sm:flex-row items-center gap-4 bg-white rounded-xl shadow-sm p-3 hover:shadow-md transition">
 
             {/* CHECKBOX */}
             <input
@@ -48,26 +48,19 @@ export default function PhoneCardList({
                 checked={checked}
                 disabled={isDisabled}
                 onChange={(e) => handleCheck(e.target.checked)}
-                className="w-5 h-5 accent-red-500 flex-shrink-0"
+                className="w-5 h-5 accent-red-500"
             />
 
             {/* IMAGE */}
-            <div className="w-16 h-16 flex-shrink-0 bg-gray-100 rounded-lg flex items-center justify-center">
-                <img
-                    src={imgSrc}
-                    alt={phone.name || phone.nom}
-                    className="object-contain w-full h-full p-2"
-                />
+           <div className="w-20 h-20 flex-shrink-0 bg-gray-100 rounded-lg flex items-center justify-center">
+                <img src={imgSrc} alt={phone.name || phone.nom} className="object-contain w-full h-full p-2" />
             </div>
 
-            {/* INFO – prend l’espace restant */}
-            <div className="min-w-0 flex-1">
-                <p className="text-sm font-semibold text-gray-800 truncate">
-                    {phone.name || phone.nom}
-                </p>
-                <p className="text-xs text-gray-500 truncate">
-                    Mémoire : {phone.memory || "-"}
-                </p>
+            {/* INFO – largeur fixe */}
+            <div className="min-w-0 w-48">
+                <p className="text-lg font-semibold text-gray-800 truncate">{phone.name || phone.nom}</p>
+                <p className="text-sm text-gray-500">Mémoire : {phone.memory || "-"}</p>
+              {/*  <p className="font-medium text-blue-600">{prixCash.toLocaleString()} FCFA</p>*/}
             </div>
 
             {/* QUANTITÉ */}
@@ -76,10 +69,12 @@ export default function PhoneCardList({
                 min={1}
                 value={quantity}
                 onChange={(e) => handleQuantityChange(Number(e.target.value))}
-                className="w-16 border rounded-lg p-1 text-center text-gray-800 flex-shrink-0"
+                className="w-20 border rounded-lg p-1 text-center text-gray-800"
             />
-        </div>
 
+            {/* TOTAL */}
+           {/* <div className="w-32 text-right font-semibold text-blue-700">{totalAmount.toLocaleString()} FCFA</div>*/}
+        </div>
     );
 }
 

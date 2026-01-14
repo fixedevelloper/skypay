@@ -34,4 +34,5 @@ export interface Order {
   status: "pending" | "waiting" | "confirmed" | "failed";
   created_at: string;
   items: OrderItem[];
+  meta: any
 }

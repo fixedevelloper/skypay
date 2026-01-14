@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { useSession, signIn } from 'next-auth/react';
 import Header from '@/app/components/Header';
 import BottomNav from '@/app/components/BottomNav';
@@ -10,7 +10,7 @@ import Link from 'next/link';
 
 
 export default function Login() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
 
   const [username, setUsername] = useState('');
@@ -18,6 +18,11 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.replace("/");
+    }
+  }, [status, router]);
   // ✅ Gérer la soumission du formulaire
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,11 +56,7 @@ export default function Login() {
     }
   };
 
-  // ✅ Si déjà connecté
-  if (session) {
-    router.push('/');
-    return null;
-  }
+
 
   return (
     <div className="min-h-screen bg-gray-100 pb-20 flex flex-col">

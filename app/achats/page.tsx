@@ -54,7 +54,7 @@ export default function Achats() {
                                 <div>
                                     <p className="text-sm text-gray-500">Commande</p>
                                     <p className="font-semibold text-gray-800">
-                                        #{order.reference_id ?? order.id}
+                                        #00{order.id ?? order.id}
                                     </p>
                                 </div>
 
@@ -67,8 +67,8 @@ export default function Achats() {
                                             : "bg-yellow-100 text-yellow-700"
                                     }`}
                                 >
-          {order.status.toUpperCase()}
-        </span>
+                    {order.status.toUpperCase()}
+                </span>
                             </div>
 
                             {/* Body */}
@@ -78,15 +78,16 @@ export default function Achats() {
                                         <p>
                                             🛒 <span className="font-medium">{order.items.length}</span> articles
                                         </p>
-
                                     </div>
 
-                                    <div className="text-right">
-                                        <p className="text-xs text-gray-500">Total</p>
-                                        <p className="text-lg font-bold text-blue-600">
-                                            {order.amount.toLocaleString()} FCFA
-                                        </p>
-                                    </div>
+                                    {order?.meta.mode !== 'distribute' && (
+                                        <div className="text-right">
+                                            <p className="text-xs text-gray-500">Total</p>
+                                            <p className="text-lg font-bold text-blue-600">
+                                                {order.amount.toLocaleString()} FCFA
+                                            </p>
+                                        </div>
+                                    )}
                                 </div>
 
                                 {/* Items */}
@@ -96,24 +97,27 @@ export default function Achats() {
                                             key={item.id}
                                             className="flex justify-between text-xs text-gray-600 py-1"
                                         >
-              <span>
-                {item.product.name}
-                  <span className="ml-1 text-gray-400">
-                  × {item.quantity}
-                </span>
-              </span>
-                                            <span className="font-medium">
-                {item.amount.toLocaleString()} FCFA
-              </span>
+                            <span>
+                                {item.product.name}
+                                <span className="ml-1 text-gray-400">
+                                    × {item.quantity}
+                                </span>
+                            </span>
+
+                                            {order?.meta.mode !== 'distribute' && (
+                                                <span className="font-medium">
+                                    {item.amount.toLocaleString()} FCFA
+                                </span>
+                                            )}
                                         </div>
                                     ))}
                                 </div>
 
                                 {/* Footer */}
                                 <div className="flex justify-between items-center mt-3 text-xs text-gray-400">
-          <span>
-            📅 {new Date(order.created_at).toLocaleDateString()}
-          </span>
+                    <span>
+                        📅 {new Date(order.created_at).toLocaleDateString()}
+                    </span>
 
                                     {order.status !== "confirmed" && (
                                         <button className="text-blue-600 font-medium hover:underline">
@@ -125,6 +129,7 @@ export default function Achats() {
                         </div>
                     ))}
                 </div>
+
 
             </div>
 

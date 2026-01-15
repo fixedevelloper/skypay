@@ -159,7 +159,7 @@ export default function Checkout() {
                             id="phone"
                             type="text"
                             className="mt-2 w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-700 focus:ring-2 focus:ring-[#014d74] focus:outline-none"
-                            placeholder="+2376XXXXXXXX"
+                            placeholder="2376XXXXXXXX"
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
                         />
